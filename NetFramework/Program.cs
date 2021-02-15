@@ -1,7 +1,11 @@
 ﻿using Example;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace NetCore
+namespace NetFramework
 {
     class Program
     {
@@ -20,6 +24,7 @@ namespace NetCore
             }
 
             Console.WriteLine(method.Log);
+            Console.ReadKey();
         }
     }
 }

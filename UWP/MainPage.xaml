@@ -9,9 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel>
-        <Button Command="{x:Bind  ViewModel.RunCommand}" Content="Run"/>
-        <TextBox Header="Value" Text="{x:Bind  ViewModel.Value, Mode=TwoWay}"/>
-        <CheckBox Content="Is Valid" IsChecked="{x:Bind  ViewModel.TagValid, Mode=TwoWay}" IsEnabled="False"/>
+        <Button Content="Run" Click="Button_Click"/>
     </StackPanel>
     
 </Page>

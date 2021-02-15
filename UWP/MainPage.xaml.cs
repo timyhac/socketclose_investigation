@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Example;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -26,32 +28,35 @@ namespace UWP
         public MainPage()
         {
             this.InitializeComponent();
-            ViewModel = new PlcViewModel();
-            ViewModel.OnError += ViewModel_OnError;
-            ViewModel.OnMessage += ViewModel_OnMessage; ;
         }
 
-        private async void ViewModel_OnMessage(object sender, string e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            await ShowDialog("Message", e);
+            var method = new MethodThatThrows();
+            try
+            {
+                var result = method.Run();
+                ShowDialog("Result", $"Result = {result}");
+            }
+            catch (SEHException ex)
+            {
+                ShowDialog("Error", ex.Message);
+            }
+            ShowDialog("Log", method.Log);
         }
 
-        private async void ViewModel_OnError(object sender, Exception e)
+        void ShowDialog(string title, string message)
         {
-            await ShowDialog(e.GetType().ToString(), e.Message);
-        }
-
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog dialog = new ContentDialog()
+            var dialog = new ContentDialog()
             {
                 Title = title,
                 Content = message,
-                CloseButtonText = "OK"
+                PrimaryButtonText = "OK"
             };
-            await dialog.ShowAsync();
+
+            dialog.ShowAsync().AsTask().GetAwaiter().GetResult();
         }
 
-        public PlcViewModel ViewModel { get; set; }
+
     }
 }
