@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -27,14 +28,25 @@ namespace UWP
             this.InitializeComponent();
             ViewModel = new PlcViewModel();
             ViewModel.OnError += ViewModel_OnError;
+            ViewModel.OnMessage += ViewModel_OnMessage; ;
+        }
+
+        private async void ViewModel_OnMessage(object sender, string e)
+        {
+            await ShowDialog("Message", e);
         }
 
         private async void ViewModel_OnError(object sender, Exception e)
         {
+            await ShowDialog(e.GetType().ToString(), e.Message);
+        }
+
+        private async Task ShowDialog(string title, string message)
+        {
             ContentDialog dialog = new ContentDialog()
             {
-                Title = e.GetType().ToString(),
-                Content = e.Message,
+                Title = title,
+                Content = message,
                 CloseButtonText = "OK"
             };
             await dialog.ShowAsync();
